@@ -5,6 +5,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -46,8 +50,6 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) {
                     Main()
 
-
-
                 }
             }
         }
@@ -55,15 +57,60 @@ class MainActivity : ComponentActivity() {
 }
 @Composable
 fun FirstScreen(navController: NavHostController) {
+    var title by remember { mutableStateOf("瑪利亞基金會服務總覽")}
     Column(modifier = Modifier
         .fillMaxSize()
     )
     {
+        Text(text = title, color = Color.Blue)
+        var appear by remember { mutableStateOf(true) }
+        Column {
+            AnimatedVisibility(
+                visible = appear,
+                enter = fadeIn(
+                    initialAlpha = 0.1f,
+                    animationSpec = tween(durationMillis = 1500)
+                ),
+                exit = fadeOut(
+                    animationSpec = tween(durationMillis = 1500)
+                )
 
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.service),
+                    contentDescription = "服務總覽",
+                )
+            }
 
-        Text(text = "簡介", color = Color.Blue)
+            AnimatedVisibility(
+                visible = !appear,
+                enter = fadeIn(
+                    initialAlpha = 0.1f,
+                    animationSpec = tween(durationMillis = 1500)
+                ),
+                exit = fadeOut(
+                    animationSpec = tween(durationMillis = 1500)
+                )
 
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.xuan),
+                    contentDescription = "xuan",
+                )
+            }
+            Button(
+                onClick = { appear = !appear }
+            ) {
+                if (appear) {
+                    Text(text = "資管二A李易軒")
+                    title = "瑪利亞基金會服務總覽"
+                } else {
+                    Text(text = "服務總覽")
+                    title = "關於APP作者"
+                }
+            }
 
+        }
     }
 }
 
